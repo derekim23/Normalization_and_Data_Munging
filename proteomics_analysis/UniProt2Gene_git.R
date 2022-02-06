@@ -1,4 +1,3 @@
-#This version has no imputations - throws out data to keep things logitudinal
 #Data manipulation packs
 library(readxl)
 library(reshape2)
@@ -7,16 +6,8 @@ library(stringr)
 library(plyr)
 
 #Bioconductor packs
-library(Mfuzz)
 library(Biobase)
 library(convert)
-library(tscR)
-
-#SignedTest packs
-library(psych)
-library(BSDA)
-library(DescTools)
-library(cluster)
 
 uniprot_mapping <- function(ids) {
   #Map UniProt IDs to gene names
