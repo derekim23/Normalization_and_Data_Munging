@@ -1,9 +1,8 @@
 # Description of Study
-The overarching goal of this study is in the realm of multiomics data and how they relate to certain phenotypic measures. All of the underlying data and code has been sanitized.
+The overarching goal of this study is in the realm of multiomics data and how they relate to certain phenotypic measures. All of the underlying data and code has been sanitized. Omics data were colelcted before and after intense exercise [blood draws 1 (pre) vs. 2, 3, and 4 (post)]. 
 
 # Immunophenotypic Data Exploration
-
-This is an exploratory analysis of immunophenotypic protein data across multiple subjects. Measurements were made before and after intense exercise (blood draws 1 vs. 2, 3, and 4). The results show no marked changes in the immunophenotypic profiles post-exercise (vs. pre-exercise).
+This is an exploratory analysis of immunophenotypic protein data across multiple subjects. The results show no marked changes in the immunophenotypic profiles post-exercise (vs. pre-exercise).
 
 # Metabolomics Data Merger
 The core idea of these files is to merge open-source metabolomics dataset into a metabolomics dataframe of a DARPA study.
