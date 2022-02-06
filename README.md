@@ -1,5 +1,5 @@
 # Description of Study
-The overarching goal of this study is in the realm of multiomics data and how they relate to certain phenotypic measures. All of the underlying data and code has been sanitized. Omics data were collected before and after intense exercise [blood draws 1 (pre) vs. 2, 3, and 4 (post)]. 
+The overarching goal of this study is in the realm of multiomics data and how they relate to certain phenotypic measures. All of the underlying data and code has been sanitized. Omics data were collected before and after intense exercis: blood draw 1 (pre-exercise) vs. blood draws 2, 3, and 4 (post-exercise). 
 
 # Immunophenotypic Data Exploration
 This is an exploratory analysis of immunophenotypic protein data across multiple subjects. The results show no marked changes in the immunophenotypic profiles post-exercise (vs. pre-exercise).
