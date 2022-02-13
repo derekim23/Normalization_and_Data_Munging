@@ -17,7 +17,7 @@ library(DescTools)
 
 #Draw in VO2Max and APOA1 data
 vo2path <- "/Volumes/GoogleDrive-115111199924997198421/My Drive/Objectives/Code/"
-vo2 <- read_excel(paste(vo2path,"DARPA-MBA-VO2max-InBody-Spring21.xlsx",sep=""),sheet="Basic InBody VO2 max")
+vo2 <- read_excel(paste(vo2path,"VO2max-InBody-Spring21.xlsx",sep=""),sheet="Basic InBody VO2 max")
 apoa1path <- "/Users/Derek/omics-integrator-master/notebooks/sample_data/proteomics/"
 
 #There are multiple blood draws for the APOA1 data

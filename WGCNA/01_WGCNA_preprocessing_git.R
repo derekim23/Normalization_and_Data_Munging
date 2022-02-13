@@ -34,7 +34,7 @@ longitudify <- function(df){
   lim_idx[1] <- lim_idx[1] + 1
   lim_idx[2] <- lim_idx[2] - 1
   
-  #Take the intersection of cadet ids present across all sessions.
+  #Take the intersection of subject ids present across all sessions.
   cap <- Reduce(intersect, list(df[df$CUSTOM_ATTRIBUTE_2==draws[1],]$CLIENT_SAMPLE_ID,
                                 df[df$CUSTOM_ATTRIBUTE_2==draws[2],]$CLIENT_SAMPLE_ID,
                                 df[df$CUSTOM_ATTRIBUTE_2==draws[3],]$CLIENT_SAMPLE_ID,
@@ -84,7 +84,7 @@ calc_dx <- function(df){
   idx_na <- is.na(dx)
   dx[idx_na] <- med[col(dx)][idx_na]
   dx[is.na(df[,2]),] <- NA
-  dx <- as.data.frame(cbind(df[,1]$`Cadet ID`,as.data.frame(dx)))
+  dx <- as.data.frame(cbind(df[,1]$`subject ID`,as.data.frame(dx)))
   colnames(dx)[1] <- "CLIENT_SAMPLE_ID"
   return(dx)
 }
@@ -112,9 +112,9 @@ prize_to_csv <- function(x, metab_info,shared_name,exclude_na=T){
 #Load main dataframe
 path <- "/Volumes/GoogleDrive-115111199924997198421/My Drive/Objectives/Code/"
 setwd(path)
-file <- 'Preprocessed_DARPA-MBA-UntargetedMetabolomics-ReNormalizedData-Spring21WestPoint-09272021-AA-DK.xlsx'
+file <- 'Preprocessed_UntargetedMetabolomics-ReNormalizedData-Spring21.xlsx'
 dat <- read_excel(file, sheet = 'Log-Trans. and Merged')
-time_file <- 'DARPA-MBA-Phlebotomy-Spring21WestPoint-08172021-AA.xlsx'
+time_file <- 'Phlebotomy-Spring21-08172021-AA.xlsx'
 
 #Load the timestamps
 seg2_time <- read_excel(time_file, sheet = 'Segment 2')
@@ -146,7 +146,7 @@ seg2_dx <- calc_dx(seg2_time)
 seg4_dx <- calc_dx(seg4_time)
 seg5_dx <- calc_dx(seg5_time)
 
-#Sort by cadet ID, blood draw, then segments
+#Sort by subject ID, blood draw, then segments
 dat <- dat[order(dat$CLIENT_SAMPLE_ID),]
 dat <- dat[order(dat$CUSTOM_ATTRIBUTE_2),]
 dat <- dat[order(dat$CUSTOM_ATTRIBUTE_1),]
@@ -170,7 +170,7 @@ seg4 <- longitudify(seg4)
 seg5 <- longitudify(seg5)
 
 #correlation analysis
-wearables_file <- 'DARPA-MBA-WearablesDuringSegments-Spring21WestPoint-08162021-AA.xlsx'
+wearables_file <- 'WearablesDuringSegments-Spring21-08162021-AA.xlsx'
 pwr <- read_excel(wearables_file, sheet = 'pwr')
 hr <- read_excel(wearables_file, sheet = 'hr')
 
@@ -179,63 +179,63 @@ seg4 <- seg4[order(seg4$CLIENT_SAMPLE_ID),]
 seg5 <- seg5[order(seg5$CLIENT_SAMPLE_ID),]
 
 #exclude GEWP048, who has janky metabolite measurements
-seg2_cadets <- pwr[!is.na(pwr$seg2) & pwr$CadetID%in%seg2$CLIENT_SAMPLE_ID,]$CadetID
-seg4_cadets <- pwr[!is.na(pwr$seg4) & pwr$CadetID%in%seg4$CLIENT_SAMPLE_ID,]$CadetID
-seg5_cadets <- pwr[!is.na(pwr$seg5) & pwr$CadetID%in%seg5$CLIENT_SAMPLE_ID,]$CadetID
+seg2_subjects <- pwr[!is.na(pwr$seg2) & pwr$subjectID%in%seg2$CLIENT_SAMPLE_ID,]$subjectID
+seg4_subjects <- pwr[!is.na(pwr$seg4) & pwr$subjectID%in%seg4$CLIENT_SAMPLE_ID,]$subjectID
+seg5_subjects <- pwr[!is.na(pwr$seg5) & pwr$subjectID%in%seg5$CLIENT_SAMPLE_ID,]$subjectID
 
-seg2_pwr <- pwr[pwr$CadetID%in%seg2_cadets,]$seg2
-seg4_pwr <- pwr[pwr$CadetID%in%seg4_cadets,]$seg4
-seg5_pwr <- pwr[pwr$CadetID%in%seg5_cadets,]$seg5
+seg2_pwr <- pwr[pwr$subjectID%in%seg2_subjects,]$seg2
+seg4_pwr <- pwr[pwr$subjectID%in%seg4_subjects,]$seg4
+seg5_pwr <- pwr[pwr$subjectID%in%seg5_subjects,]$seg5
 
-seg2_hr <- hr[hr$CadetID%in%seg2_cadets,]$seg2
-seg4_hr <- hr[hr$CadetID%in%seg4_cadets,]$seg4
-seg5_hr <- hr[hr$CadetID%in%seg5_cadets,]$seg5
+seg2_hr <- hr[hr$subjectID%in%seg2_subjects,]$seg2
+seg4_hr <- hr[hr$subjectID%in%seg4_subjects,]$seg4
+seg5_hr <- hr[hr$subjectID%in%seg5_subjects,]$seg5
 
-seg2_bd1 <- seg2[seg2$CLIENT_SAMPLE_ID%in%seg2_cadets & seg2$CUSTOM_ATTRIBUTE_2 == "Blood Draw 1",]
-seg2_bd2 <- seg2[seg2$CLIENT_SAMPLE_ID%in%seg2_cadets & seg2$CUSTOM_ATTRIBUTE_2 == "Blood Draw 2",]
-seg2_bd3 <- seg2[seg2$CLIENT_SAMPLE_ID%in%seg2_cadets & seg2$CUSTOM_ATTRIBUTE_2 == "Blood Draw 3",]
-seg2_bd4 <- seg2[seg2$CLIENT_SAMPLE_ID%in%seg2_cadets & seg2$CUSTOM_ATTRIBUTE_2 == "Blood Draw 4",]
+seg2_bd1 <- seg2[seg2$CLIENT_SAMPLE_ID%in%seg2_subjects & seg2$CUSTOM_ATTRIBUTE_2 == "Blood Draw 1",]
+seg2_bd2 <- seg2[seg2$CLIENT_SAMPLE_ID%in%seg2_subjects & seg2$CUSTOM_ATTRIBUTE_2 == "Blood Draw 2",]
+seg2_bd3 <- seg2[seg2$CLIENT_SAMPLE_ID%in%seg2_subjects & seg2$CUSTOM_ATTRIBUTE_2 == "Blood Draw 3",]
+seg2_bd4 <- seg2[seg2$CLIENT_SAMPLE_ID%in%seg2_subjects & seg2$CUSTOM_ATTRIBUTE_2 == "Blood Draw 4",]
 
 seg2_bd1 <- seg2_bd1[!duplicated(seg2_bd1$CLIENT_SAMPLE_ID),]
 seg2_bd2 <- seg2_bd2[!duplicated(seg2_bd2$CLIENT_SAMPLE_ID),]
 seg2_bd3 <- seg2_bd3[!duplicated(seg2_bd3$CLIENT_SAMPLE_ID),]
 seg2_bd4 <- seg2_bd4[!duplicated(seg2_bd4$CLIENT_SAMPLE_ID),]
 
-seg4_bd1 <- seg4[seg4$CLIENT_SAMPLE_ID%in%seg4_cadets & seg4$CUSTOM_ATTRIBUTE_2 == "Blood Draw 1",]
-seg4_bd2 <- seg4[seg4$CLIENT_SAMPLE_ID%in%seg4_cadets & seg4$CUSTOM_ATTRIBUTE_2 == "Blood Draw 2",]
-seg4_bd3 <- seg4[seg4$CLIENT_SAMPLE_ID%in%seg4_cadets & seg4$CUSTOM_ATTRIBUTE_2 == "Blood Draw 3",]
-seg4_bd4 <- seg4[seg4$CLIENT_SAMPLE_ID%in%seg4_cadets & seg4$CUSTOM_ATTRIBUTE_2 == "Blood Draw 4",]
+seg4_bd1 <- seg4[seg4$CLIENT_SAMPLE_ID%in%seg4_subjects & seg4$CUSTOM_ATTRIBUTE_2 == "Blood Draw 1",]
+seg4_bd2 <- seg4[seg4$CLIENT_SAMPLE_ID%in%seg4_subjects & seg4$CUSTOM_ATTRIBUTE_2 == "Blood Draw 2",]
+seg4_bd3 <- seg4[seg4$CLIENT_SAMPLE_ID%in%seg4_subjects & seg4$CUSTOM_ATTRIBUTE_2 == "Blood Draw 3",]
+seg4_bd4 <- seg4[seg4$CLIENT_SAMPLE_ID%in%seg4_subjects & seg4$CUSTOM_ATTRIBUTE_2 == "Blood Draw 4",]
 
 seg4_bd1 <- seg4_bd1[!duplicated(seg4_bd1$CLIENT_SAMPLE_ID),]
 seg4_bd2 <- seg4_bd2[!duplicated(seg4_bd2$CLIENT_SAMPLE_ID),]
 seg4_bd3 <- seg4_bd3[!duplicated(seg4_bd3$CLIENT_SAMPLE_ID),]
 seg4_bd4 <- seg4_bd4[!duplicated(seg4_bd4$CLIENT_SAMPLE_ID),]
 
-seg5_bd1 <- seg5[seg5$CLIENT_SAMPLE_ID%in%seg5_cadets & seg5$CUSTOM_ATTRIBUTE_2 == "Blood Draw 1",]
-seg5_bd2 <- seg5[seg5$CLIENT_SAMPLE_ID%in%seg5_cadets & seg5$CUSTOM_ATTRIBUTE_2 == "Blood Draw 2",]
-seg5_bd3 <- seg5[seg5$CLIENT_SAMPLE_ID%in%seg5_cadets & seg5$CUSTOM_ATTRIBUTE_2 == "Blood Draw 3",]
-seg5_bd4 <- seg5[seg5$CLIENT_SAMPLE_ID%in%seg5_cadets & seg5$CUSTOM_ATTRIBUTE_2 == "Blood Draw 4",]
+seg5_bd1 <- seg5[seg5$CLIENT_SAMPLE_ID%in%seg5_subjects & seg5$CUSTOM_ATTRIBUTE_2 == "Blood Draw 1",]
+seg5_bd2 <- seg5[seg5$CLIENT_SAMPLE_ID%in%seg5_subjects & seg5$CUSTOM_ATTRIBUTE_2 == "Blood Draw 2",]
+seg5_bd3 <- seg5[seg5$CLIENT_SAMPLE_ID%in%seg5_subjects & seg5$CUSTOM_ATTRIBUTE_2 == "Blood Draw 3",]
+seg5_bd4 <- seg5[seg5$CLIENT_SAMPLE_ID%in%seg5_subjects & seg5$CUSTOM_ATTRIBUTE_2 == "Blood Draw 4",]
 
 seg5_bd1 <- seg5_bd1[!duplicated(seg5_bd1$CLIENT_SAMPLE_ID),]
 seg5_bd2 <- seg5_bd2[!duplicated(seg5_bd2$CLIENT_SAMPLE_ID),]
 seg5_bd3 <- seg5_bd3[!duplicated(seg5_bd3$CLIENT_SAMPLE_ID),]
 seg5_bd4 <- seg5_bd4[!duplicated(seg5_bd4$CLIENT_SAMPLE_ID),]
 
-#Check for cadet alignment
-all.equal(seg2_cadets, seg2_bd1$CLIENT_SAMPLE_ID)
-all.equal(seg2_cadets, seg2_bd2$CLIENT_SAMPLE_ID)
-all.equal(seg2_cadets_2, seg2_bd3$CLIENT_SAMPLE_ID)
-all.equal(seg2_cadets_2, seg2_bd4$CLIENT_SAMPLE_ID)
+#Check for subject alignment
+all.equal(seg2_subjects, seg2_bd1$CLIENT_SAMPLE_ID)
+all.equal(seg2_subjects, seg2_bd2$CLIENT_SAMPLE_ID)
+all.equal(seg2_subjects_2, seg2_bd3$CLIENT_SAMPLE_ID)
+all.equal(seg2_subjects_2, seg2_bd4$CLIENT_SAMPLE_ID)
 
-all.equal(seg4_cadets, seg4_bd1$CLIENT_SAMPLE_ID)
-all.equal(seg4_cadets, seg4_bd2$CLIENT_SAMPLE_ID)
-all.equal(seg4_cadets, seg4_bd3$CLIENT_SAMPLE_ID)
-all.equal(seg4_cadets, seg4_bd4$CLIENT_SAMPLE_ID)
+all.equal(seg4_subjects, seg4_bd1$CLIENT_SAMPLE_ID)
+all.equal(seg4_subjects, seg4_bd2$CLIENT_SAMPLE_ID)
+all.equal(seg4_subjects, seg4_bd3$CLIENT_SAMPLE_ID)
+all.equal(seg4_subjects, seg4_bd4$CLIENT_SAMPLE_ID)
 
-all.equal(seg5_cadets, seg5_bd1$CLIENT_SAMPLE_ID)
-all.equal(seg5_cadets, seg5_bd2$CLIENT_SAMPLE_ID)
-all.equal(seg5_cadets, seg5_bd3$CLIENT_SAMPLE_ID)
-all.equal(seg5_cadets, seg5_bd4$CLIENT_SAMPLE_ID)
+all.equal(seg5_subjects, seg5_bd1$CLIENT_SAMPLE_ID)
+all.equal(seg5_subjects, seg5_bd2$CLIENT_SAMPLE_ID)
+all.equal(seg5_subjects, seg5_bd3$CLIENT_SAMPLE_ID)
+all.equal(seg5_subjects, seg5_bd4$CLIENT_SAMPLE_ID)
 
 #Calculate log2-fold change.
 seg2_l21 <- log(exp(seg2_bd2[,2:1270] - seg2_bd1[,2:1270]),2)
@@ -324,13 +324,13 @@ log_prot_sans_na1 <- read.csv('log_prot_S2BD1.csv',header=T)[,-1]
 log_prot_sans_na2 <- read.csv('log_prot_S2BD2.csv',header=T)[,-1]
 log_prot_sans_na3 <- read.csv('log_prot_S2BD3.csv',header=T)[,-1]
 
-seg2_cadets_prot_bd1 <- read.csv('log_prot_S2BD1.csv',header=T)[,1]
-seg2_cadets_prot_bd2 <- read.csv('log_prot_S2BD2.csv',header=T)[,1]
-seg2_cadets_prot_bd3 <- read.csv('log_prot_S2BD3.csv',header=T)[,1]
+seg2_subjects_prot_bd1 <- read.csv('log_prot_S2BD1.csv',header=T)[,1]
+seg2_subjects_prot_bd2 <- read.csv('log_prot_S2BD2.csv',header=T)[,1]
+seg2_subjects_prot_bd3 <- read.csv('log_prot_S2BD3.csv',header=T)[,1]
 
-seg2_bd1_prot <- log_prot_sans_na1[seg2_cadets_prot_bd1%in%seg2_cadets,]
-seg2_bd2_prot <- log_prot_sans_na2[seg2_cadets_prot_bd2%in%seg2_cadets,]
-seg2_bd3_prot <- log_prot_sans_na3[seg2_cadets_prot_bd3%in%seg2_cadets,]
+seg2_bd1_prot <- log_prot_sans_na1[seg2_subjects_prot_bd1%in%seg2_subjects,]
+seg2_bd2_prot <- log_prot_sans_na2[seg2_subjects_prot_bd2%in%seg2_subjects,]
+seg2_bd3_prot <- log_prot_sans_na3[seg2_subjects_prot_bd3%in%seg2_subjects,]
 
 temp <- colnames(seg2_bd1_prot)[colnames(seg2_bd1_prot)%in%colnames(seg2_bd2_prot)]
 shared_cols <- temp[temp%in%colnames(seg2_bd3_prot)]
@@ -339,27 +339,27 @@ seg2_bd1_prot_c <- seg2_bd1_prot[,shared_cols]
 seg2_bd2_prot_c <- seg2_bd2_prot[,shared_cols]
 seg2_bd3_prot_c <- seg2_bd3_prot[,shared_cols]
 
-temp <- seg2_cadets_prot_bd1[seg2_cadets_prot_bd1%in%seg2_cadets]
-temp2 <- seg2_cadets_prot_bd2[seg2_cadets_prot_bd2%in%seg2_cadets]
-temp3 <- seg2_cadets_prot_bd3[seg2_cadets_prot_bd3%in%seg2_cadets]
+temp <- seg2_subjects_prot_bd1[seg2_subjects_prot_bd1%in%seg2_subjects]
+temp2 <- seg2_subjects_prot_bd2[seg2_subjects_prot_bd2%in%seg2_subjects]
+temp3 <- seg2_subjects_prot_bd3[seg2_subjects_prot_bd3%in%seg2_subjects]
 
 seg2_bd1_prot_cc <- seg2_bd1_prot[temp%in%temp2,shared_cols]
 seg2_bd2_prot_cc <- seg2_bd2_prot[temp2%in%temp2,shared_cols]
 seg2_bd3_prot_cc <- seg2_bd3_prot[temp3%in%temp2,shared_cols]
 
 seg2_bd1_np <- cbind(seg2_bd1_n,seg2_bd1_prot)
-seg2_bd2_np <- cbind(seg2_bd2_n[seg2_cadets%in%seg2_cadets_prot_bd2,],seg2_bd2_prot)
+seg2_bd2_np <- cbind(seg2_bd2_n[seg2_subjects%in%seg2_subjects_prot_bd2,],seg2_bd2_prot)
 seg2_bd3_np <- cbind(seg2_bd3_n,seg2_bd3_prot)
 
-seg2_bd1_np <- seg2_bd1_np[seg2_cadets_prot_bd1[(seg2_cadets_prot_bd1%in%seg2_cadets)]%in%seg2_cadets_prot_bd2,]
-seg2_bd3_np <- seg2_bd3_np[seg2_cadets_prot_bd3[(seg2_cadets_prot_bd3%in%seg2_cadets)]%in%seg2_cadets_prot_bd2,]
+seg2_bd1_np <- seg2_bd1_np[seg2_subjects_prot_bd1[(seg2_subjects_prot_bd1%in%seg2_subjects)]%in%seg2_subjects_prot_bd2,]
+seg2_bd3_np <- seg2_bd3_np[seg2_subjects_prot_bd3[(seg2_subjects_prot_bd3%in%seg2_subjects)]%in%seg2_subjects_prot_bd2,]
 
 seg2_bd1_npc <- cbind(seg2_bd1_n,seg2_bd1_prot_c)
-seg2_bd2_npc <- cbind(seg2_bd2_n[seg2_cadets%in%seg2_cadets_prot_bd2,],seg2_bd2_prot_c)
+seg2_bd2_npc <- cbind(seg2_bd2_n[seg2_subjects%in%seg2_subjects_prot_bd2,],seg2_bd2_prot_c)
 seg2_bd3_npc <- cbind(seg2_bd3_n,seg2_bd3_prot_c)
 
-seg2_bd1_npc <- seg2_bd1_npc[seg2_cadets_prot_bd1[(seg2_cadets_prot_bd1%in%seg2_cadets)]%in%seg2_cadets_prot_bd2,]
-seg2_bd3_npc <- seg2_bd3_npc[seg2_cadets_prot_bd3[(seg2_cadets_prot_bd3%in%seg2_cadets)]%in%seg2_cadets_prot_bd2,]
+seg2_bd1_npc <- seg2_bd1_npc[seg2_subjects_prot_bd1[(seg2_subjects_prot_bd1%in%seg2_subjects)]%in%seg2_subjects_prot_bd2,]
+seg2_bd3_npc <- seg2_bd3_npc[seg2_subjects_prot_bd3[(seg2_subjects_prot_bd3%in%seg2_subjects)]%in%seg2_subjects_prot_bd2,]
 
 seg2_l21_npc <- log(exp(seg2_bd2_npc-seg2_bd1_npc),2)
 seg2_l32_npc <- log(exp(seg2_bd3_npc-seg2_bd2_npc),2)
@@ -377,14 +377,14 @@ elim_no_var <- function(x){
 #First, set the blood draw 2 metabolites dataframe as the main dataset.
 #Also create a separate data-frame tracking the desired phenotypes.
 x1 = seg2_bd2_np
-vo2 <- read_excel(paste(path,'DARPA-MBA-VO2max-InBody-Spring21WestPoint-08142021-AA.xlsx',sep=''))
-vo2 <- vo2[vo2$`Cadet ID`%in%seg2_cadets,]
-x2 = cbind(seg2_pwr[seg2_cadets%in%seg2_cadets_prot_bd2],
-           seg2_hr[seg2_cadets%in%seg2_cadets_prot_bd2],
-           as.numeric(vo2$`VO2 Max (mL/Kg/min)`[seg2_cadets%in%seg2_cadets_prot_bd2]),
-           as.numeric(vo2$`Power @ VO2max (From Fitmate)- W`[seg2_cadets%in%seg2_cadets_prot_bd2]),
-           as.numeric(vo2$`Percent Body Fat (%)`[seg2_cadets%in%seg2_cadets_prot_bd2]),
-           as.numeric(vo2$`Skeletal Muscle Mass (lbs)`[seg2_cadets%in%seg2_cadets_prot_bd2])
+vo2 <- read_excel(paste(path,'VO2max-InBody-Spring21-08142021-AA.xlsx',sep=''))
+vo2 <- vo2[vo2$`subject ID`%in%seg2_subjects,]
+x2 = cbind(seg2_pwr[seg2_subjects%in%seg2_subjects_prot_bd2],
+           seg2_hr[seg2_subjects%in%seg2_subjects_prot_bd2],
+           as.numeric(vo2$`VO2 Max (mL/Kg/min)`[seg2_subjects%in%seg2_subjects_prot_bd2]),
+           as.numeric(vo2$`Power @ VO2max (From Fitmate)- W`[seg2_subjects%in%seg2_subjects_prot_bd2]),
+           as.numeric(vo2$`Percent Body Fat (%)`[seg2_subjects%in%seg2_subjects_prot_bd2]),
+           as.numeric(vo2$`Skeletal Muscle Mass (lbs)`[seg2_subjects%in%seg2_subjects_prot_bd2])
 )
 
 #There should be a few NA's.

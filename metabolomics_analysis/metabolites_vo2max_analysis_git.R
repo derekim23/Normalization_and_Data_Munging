@@ -18,7 +18,7 @@ library(DescTools)
 
 #Draw in VO2Max, hemoglobin, metabolites, etc. data
 vo2path <- "/Volumes/GoogleDrive-115111199924997198421/My Drive/Objectives/Code/"
-vo2_file <- "DARPA-VO2max-InBody-Spring21-08142021-AA.xlsx"
+vo2_file <- "VO2max-InBody-Spring21-08142021.xlsx"
 vo2 <- read_excel(paste(vo2path,vo2_file,sep=""),sheet="Basic InBody VO2 max")
 
 hgb_path <- "/Users/Derek/Downloads/"
@@ -28,9 +28,9 @@ hgb_bd1 <- hgb_bd1[,c('subject ID', 'Hgb (EC8+(4)) Result for Blood Draw 1')]
 hgb_bd2 <- hgb_bd2[,c('subject ID', 'Hgb (EC8+(4)) Result for Blood Draw 2')]
 colnames(hgb_bd2)[2] <- "hgb"
 colnames(hgb_bd1)[2] <- "hgb"
-cog <- read_excel(paste(hgb_path, "DARPA-AMS-Spring-01052022-dk.xlsx", sep = ""), sheet = "Sheet2")
+cog <- read_excel(paste(hgb_path, "AMS-Spring-01052022-dk.xlsx", sep = ""), sheet = "Sheet2")
 
-metab_file <- 'Preprocessed_DARPA-UntargetedMetabolomics-ReNormalizedData-Spring21-09272021-AA-DK.xlsx'
+metab_file <- 'Preprocessed_UntargetedMetabolomics-ReNormalizedData-Spring21-09272021.xlsx'
 metab <- read_excel(paste(vo2path, metab_file, sep = ""), 
                     sheet = "Log-Transformed and Merged Data")
 short_list <- read_excel(paste(vo2path, metab_file, sep = ""), 
