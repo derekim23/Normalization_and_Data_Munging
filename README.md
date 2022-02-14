@@ -18,3 +18,10 @@ The last step invovles applying [sparse canonical correlation analysis](https://
 
 # [Weighted Gene Co-expression Network Analysis](https://horvath.genetics.ucla.edu/html/CoexpressionNetwork/Rpackages/WGCNA/Tutorials/) (WGCNA)
 This is a clustering technique that treats any given set of molecules as a fully connected network with each edge corresponding to a relationship score between a pair of molecules. The score is calculated based on the absolute correlation of expression/abundance values. Likewise, each node corresponds to each molecule. A dissimilarity metric between every pair of nodes is calculated based on the edge scores and the surrounding first order neighbors. With this metric, hierarchical clustering is performed to bring together molecules that are highly correlated with each other. Finally, representatives of these clusters (eigenvectors) are correlated to target phenotypes to see whether each cluster has a meaningful relationship with the target phenotypes.
+
+# Proteomics Analysis
+The first step invovles matching [UniProt IDs](https://www.uniprot.org/) to [gene IDs](https://www.proteinatlas.org/) so that the data can be processed by [Omics Integrator](http://fraenkel-nsf.csbi.mit.edu/omicsintegrator/) which can be used to identify a network of biophysical and biochemical reactions across the omics spectrum; these networks can serve as putative biological pathways.
+
+The second step invovles orgnizing the data in a frame with [KNN imputations](https://www.rdocumentation.org/packages/impute/versions/1.46.0/topics/impute.knn); given the noisy nature of the proteomics data collection, there are oftentimes many missing proteins across subjects, which often results in a low cardinality of the intersection. The data is organized such that, if a protein is observed across at least 50% of the subjects, the remainder is simply KNN imputed.
+
+The third step is to see if there is any meaningful relationship between the APOA1 protein and VO2Max with regression.
