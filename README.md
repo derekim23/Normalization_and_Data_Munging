@@ -16,7 +16,7 @@ The second step invovles analyzing the correlations between certain metabolites 
 
 The last step invovles applying [sparse canonical correlation analysis](https://cran.r-project.org/web/packages/PMA/PMA.pdf) to the dataset to achieve dimensionality reduction, to see if there is any meaningful way to relate a linear combination of the molecular data to a linear combination of the target phenotypes. Also, a [LASSO stability selection](https://cran.r-project.org/web/packages/stabs/stabs.pdf) method is used to select features that may be fed into a machine learning pipeline for predictions of phenotypic targets.
 
-# [Weighted Gene Co-expression Network Analysis](https://horvath.genetics.ucla.edu/html/CoexpressionNetwork/Rpackages/WGCNA/Tutorials/) (WGCNA)
+# [Weighted Gene Co-expr. Net Analysis](https://horvath.genetics.ucla.edu/html/CoexpressionNetwork/Rpackages/WGCNA/Tutorials/) (WGCNA)
 This is a clustering technique that treats any given set of molecules as a fully connected network with each edge corresponding to a relationship score between a pair of molecules. The score is calculated based on the absolute correlation of expression/abundance values. Likewise, each node corresponds to each molecule. A dissimilarity metric between every pair of nodes is calculated based on the edge scores and the surrounding first order neighbors. With this metric, hierarchical clustering is performed to bring together molecules that are highly correlated with each other. Finally, representatives of these clusters (eigenvectors) are correlated to target phenotypes to see whether each cluster has a meaningful relationship with the target phenotypes.
 
 # Proteomics Analysis
