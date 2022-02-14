@@ -1,4 +1,3 @@
-#This version has no imputations - throws out data to keep things logitudinal
 #Data manipulation packs
 library(readxl)
 library(reshape2)
