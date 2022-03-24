@@ -1,11 +1,11 @@
 # Description of Study
-The overarching goal of this DARPA study is to explore the relationship between multiomics data and certain phenotypic measures (e.g. VO2Max). All of the underlying data and code has been sanitized. Omics data were collected before and after intense exercise: blood draw 1 (pre-exercise) vs. blood draws 2, 3, and 4 (post-exercise). The experiment and data collection were repeated twice, resulting in a total of three sessions of four blood draws.
+The overarching goal of this study is to explore the relationship between multiomics data and certain phenotypic measures (e.g. VO2Max). All of the underlying data and code has been sanitized. Omics data were collected before and after intense exercise: blood draw 1 (pre-exercise) vs. blood draws 2, 3, and 4 (post-exercise). The experiment and data collection were repeated twice, resulting in a total of three sessions of four blood draws.
 
 # Immunophenotypic Data Exploration
 This is an exploratory analysis of immunophenotypic protein data across multiple subjects. The results show no marked changes in the immunophenotypic profiles post-exercise (vs. pre-exercise).
 
 # Metabolomics Data Merger
-The core idea of these files is to merge open-source metabolomics dataset into a metabolomics dataframe of a DARPA study.
+The core idea of these files is to merge open-source metabolomics dataset into a metabolomics dataframe of the study.
 The athlete_norm_git.R file is an attempt at reverse engineering a batch normalization process conducted by Metabolon and replicating that on other raw datasets collected by the same company.
 The corr_matrices_comp_git.R file is for comparing the empirical correlation matrices of metabolite abundances of two different datasets and highlighting correlations that are close.
 
